@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { CloudSun, Fuel, Gauge, Settings, Stethoscope, Wrench } from 'lucide-react'
-import { cx } from './ui'
+import { cx, km } from './ui'
 import { useStore } from '../lib/store'
 
 const NAV = [
@@ -16,10 +16,10 @@ function Logo() {
     <div className="flex items-center gap-2.5">
       <img src="/icon.svg" alt="" className="h-9 w-9" />
       <div className="leading-tight">
-        <div className="text-lg font-extrabold tracking-tight">
+        <div className="font-display text-2xl font-bold uppercase italic tracking-wide">
           Moto<span className="text-accent">Mate</span>
         </div>
-        <div className="text-[11px] text-muted">Ride smarter in Taiwan</div>
+        <div className="font-display text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">Ride smarter in Taiwan</div>
       </div>
     </div>
   )
@@ -30,7 +30,7 @@ export function Layout() {
   return (
     <div className="min-h-screen md:flex">
       {/* Desktop sidebar */}
-      <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-line bg-surface p-5 md:flex">
+      <aside className="carbon sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-line p-5 md:flex">
         <Logo />
         <nav className="mt-8 flex flex-col gap-1">
           {[...NAV, { to: '/settings', label: 'Settings', icon: Settings }].map(({ to, label, icon: Icon }) => (
@@ -39,18 +39,27 @@ export function Layout() {
               to={to}
               end={to === '/'}
               className={({ isActive }) =>
-                cx('flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors', isActive ? 'bg-accent-soft text-accent' : 'text-muted hover:bg-surface-2 hover:text-ink')
+                cx(
+                  'relative flex items-center gap-3 rounded-lg px-3 py-2.5 font-display text-base font-semibold uppercase tracking-wider transition-colors',
+                  isActive ? 'bg-accent-soft text-accent' : 'text-muted hover:bg-surface-2 hover:text-ink',
+                )
               }
             >
-              <Icon size={18} />
-              {label}
+              {({ isActive }) => (
+                <>
+                  {isActive && <span className="absolute top-2 bottom-2 left-0 w-[3px] rounded-full bg-accent shadow-[0_0_8px_var(--color-accent)]" />}
+                  <Icon size={18} />
+                  {label}
+                </>
+              )}
             </NavLink>
           ))}
         </nav>
-        <div className="mt-auto rounded-xl border border-line bg-surface-2 p-3 text-xs">
-          <div className="text-muted">Your bike</div>
+        <div className="mt-auto rounded-xl border border-line bg-black/40 p-3 text-xs">
+          <div className="font-display font-semibold uppercase tracking-[0.16em] text-muted">Your bike</div>
           <div className="mt-0.5 font-semibold">{bike.nickname}</div>
           <div className="text-muted">{bike.model}</div>
+          <div className="num mt-2 text-sm text-ink">{km(bike.odometer)} <span className="text-muted">km</span></div>
         </div>
       </aside>
 
@@ -73,10 +82,15 @@ export function Layout() {
             key={to}
             to={to}
             end={to === '/'}
-            className={({ isActive }) => cx('flex flex-col items-center gap-1 py-2.5 text-[11px] font-medium', isActive ? 'text-accent' : 'text-muted')}
+            className={({ isActive }) => cx('relative flex flex-col items-center gap-1 py-2.5 font-display text-xs font-semibold uppercase tracking-wider', isActive ? 'text-accent' : 'text-muted')}
           >
-            <Icon size={20} />
-            {label}
+            {({ isActive }) => (
+              <>
+                {isActive && <span className="absolute inset-x-5 top-0 h-[3px] rounded-b-full bg-accent shadow-[0_0_8px_var(--color-accent)]" />}
+                <Icon size={20} />
+                {label}
+              </>
+            )}
           </NavLink>
         ))}
       </nav>

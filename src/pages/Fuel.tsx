@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { Fuel as FuelIcon, Plus, Trash2, TrendingUp, Wallet } from 'lucide-react'
-import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, Line, LineChart, ReferenceArea, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { useStore } from '../lib/store'
 import { fillCost, fuelStats, monthlySpend } from '../lib/fuel'
 import { formatDate, parseISODate, todayISO, uid } from '../lib/date'
 import { ChartTooltip } from '../components/ChartTooltip'
 import { Button, Card, CardTitle, Empty, Field, Input, PageHeader, Stat, km, nt } from '../components/ui'
 
-const ACCENT = '#f97316'
+const ACCENT = '#ff6a13'
 const axisProps = { stroke: 'var(--color-muted)', fontSize: 11, tickLine: false, axisLine: false } as const
 const shortDate = (s: string) => parseISODate(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 const monthLabel = (m: string) => parseISODate(`${m}-01`).toLocaleDateString('en-US', { month: 'short', year: '2-digit' })
@@ -95,6 +95,8 @@ export default function FuelPage() {
                   <CartesianGrid vertical={false} stroke="var(--color-line)" />
                   <XAxis dataKey="date" tickFormatter={shortDate} minTickGap={24} {...axisProps} />
                   <YAxis domain={['dataMin - 3', 'dataMax + 3']} tickFormatter={(v) => Math.round(v).toString()} {...axisProps} />
+                  {/* Typical range for the Wild Wolf 150 — the green zone on the dashboard dial. */}
+                  <ReferenceArea y1={35} y2={45} ifOverflow="hidden" fill="var(--color-good)" fillOpacity={0.07} stroke="var(--color-good)" strokeOpacity={0.25} strokeDasharray="4 4" />
                   <Tooltip
                     cursor={{ stroke: 'var(--color-muted)', strokeDasharray: '3 3' }}
                     content={<ChartTooltip format={(v) => `${v.toFixed(1)} km/L`} labelFormat={formatDate} />}
@@ -127,7 +129,7 @@ export default function FuelPage() {
           <div className="-mx-5 overflow-x-auto px-5">
             <table className="w-full min-w-[520px] text-sm">
               <thead>
-                <tr className="text-left text-xs uppercase tracking-wider text-muted">
+                <tr className="text-left font-display text-xs uppercase tracking-[0.14em] text-muted">
                   <th className="pb-2 font-medium">Date</th>
                   <th className="pb-2 text-right font-medium">Odometer</th>
                   <th className="pb-2 text-right font-medium">Liters</th>

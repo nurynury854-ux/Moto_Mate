@@ -1,4 +1,5 @@
 import type { RideScore } from '../lib/rideScore'
+import { Dial, type Zone } from './gauges'
 
 const toneColor: Record<RideScore['tone'], string> = {
   great: 'var(--color-good)',
@@ -7,25 +8,17 @@ const toneColor: Record<RideScore['tone'], string> = {
   bad: 'var(--color-bad)',
 }
 
-/** Speedometer-style 240° arc gauge. */
-export function ScoreGauge({ score, tone, size = 180 }: { score: number; tone: RideScore['tone']; size?: number }) {
-  const r = 70
-  const c = 2 * Math.PI * r
-  const arc = c * (240 / 360)
-  const filled = arc * (score / 100)
-  return (
-    <svg width={size} height={size} viewBox="0 0 180 180" role="img" aria-label={`Ride score ${score} out of 100`}>
-      <g transform="rotate(150 90 90)">
-        <circle cx="90" cy="90" r={r} fill="none" stroke="var(--color-line)" strokeWidth="14" strokeLinecap="round" strokeDasharray={`${arc} ${c}`} />
-        <circle
-          cx="90" cy="90" r={r} fill="none" stroke={toneColor[tone]} strokeWidth="14" strokeLinecap="round"
-          strokeDasharray={`${filled} ${c}`} style={{ transition: 'stroke-dasharray 0.8s ease' }}
-        />
-      </g>
-      <text x="90" y="98" textAnchor="middle" className="num" fontSize="46" fontWeight="700" fill="var(--color-ink)">{score}</text>
-      <text x="90" y="124" textAnchor="middle" fontSize="11" fill="var(--color-muted)" letterSpacing="2">RIDE SCORE</text>
-    </svg>
-  )
+// Same thresholds as labelFor() in rideScore.ts.
+const ZONES: Zone[] = [
+  { from: 0, to: 40, color: toneColor.bad },
+  { from: 40, to: 60, color: toneColor.care },
+  { from: 60, to: 80, color: toneColor.good },
+  { from: 80, to: 100, color: toneColor.great },
+]
+
+/** Speedometer-style ride score dial. */
+export function ScoreGauge({ score, size = 200 }: { score: number; size?: number }) {
+  return <Dial value={score} step={20} minor={4} zones={ZONES} label="RIDE SCORE" unit="/ 100" size={size} ariaLabel={`Ride score ${score} out of 100`} />
 }
 
 export const scoreColor = toneColor

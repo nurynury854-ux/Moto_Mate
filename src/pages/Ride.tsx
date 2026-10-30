@@ -6,6 +6,7 @@ import { TAIWAN_CITIES, nearestCity, weatherLabel } from '../lib/weather'
 import { bestWindow, gearTips, scoreHour } from '../lib/rideScore'
 import { ScoreGauge, scoreColor } from '../components/ScoreGauge'
 import { Button, Card, CardTitle, PageHeader, cx, inputClass } from '../components/ui'
+import { SegmentBar, solidColor } from '../components/gauges'
 
 const hourLabel = (iso: string) => iso.slice(11, 16)
 
@@ -84,13 +85,13 @@ export default function Ride() {
           <Card className="lg:col-span-3">
             <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
               <div className="shrink-0">
-                <ScoreGauge score={now.score} tone={now.tone} />
+                <ScoreGauge score={now.score} size={210} />
               </div>
               <div className="w-full min-w-0 flex-1">
                 <div className="flex items-center gap-1.5 text-sm text-muted">
                   <MapPin size={14} /> {place.name} · now
                 </div>
-                <div className="mt-1 text-3xl font-extrabold" style={{ color: scoreColor[now.tone] }}>{now.label}</div>
+                <div className="mt-1 font-display text-4xl font-bold uppercase tracking-wide" style={{ color: scoreColor[now.tone] }}>{now.label}</div>
                 <div className="mt-1 text-muted">{weatherLabel(data.current.code)}</div>
                 <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-sm sm:grid-cols-4">
                   <Metric icon={<Thermometer size={14} />} label="Temp" value={`${Math.round(data.current.temp)}°C`} sub={`feels ${Math.round(data.current.feelsLike)}°`} />
@@ -101,7 +102,7 @@ export default function Ride() {
               </div>
             </div>
             <div className="mt-6 border-t border-line pt-4">
-              <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">Why this score</div>
+              <div className="mb-2 font-display text-sm font-semibold uppercase tracking-[0.14em] text-muted">Why this score</div>
               {now.penalties.length === 0 ? (
                 <p className="text-sm text-good">No penalties — perfect riding conditions.</p>
               ) : (
@@ -156,11 +157,11 @@ export default function Ride() {
                     <div
                       key={h.time}
                       title={`${hourLabel(h.time)} — score ${s.score}: ${s.label}`}
-                      className={cx('flex w-16 flex-col items-center gap-2 rounded-xl border px-1 py-3', inBest ? 'border-accent/60 bg-accent-soft' : 'border-line bg-surface-2')}
+                      className={cx('flex w-16 flex-col items-center gap-2 rounded-xl border px-1 py-3', inBest ? 'border-accent/60 bg-accent-soft' : 'border-line bg-[#0c0e11]')}
                     >
                       <div className="num text-xs text-muted">{i === 0 ? 'Now' : hourLabel(h.time)}</div>
-                      <div className="flex h-20 w-3 items-end overflow-hidden rounded-full bg-line">
-                        <div className="w-full rounded-full" style={{ height: `${Math.max(6, s.score)}%`, background: scoreColor[s.tone] }} />
+                      <div className="h-24 w-4">
+                        <SegmentBar vertical value={s.score / 100} segments={12} color={solidColor(scoreColor[s.tone])} />
                       </div>
                       <div className="num text-sm font-bold">{s.score}</div>
                       <div className="num text-[11px] text-sky">{h.rainProb}%</div>
@@ -171,7 +172,7 @@ export default function Ride() {
               </div>
             </div>
             <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted">
-              <span>Bar = ride score</span>
+              <span>LED bar = ride score</span>
               <span className="text-sky">Blue = chance of rain</span>
               <span>Grey = temperature</span>
               <span className="text-accent">Highlighted = best window</span>

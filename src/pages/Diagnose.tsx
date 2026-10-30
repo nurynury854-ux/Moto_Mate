@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { ChevronLeft, ChevronRight, Hammer, RotateCcw, ShieldAlert, Stethoscope, Store } from 'lucide-react'
 import { SYMPTOMS, rankCauses, type Symptom } from '../lib/diagnose'
-import { Badge, Button, Card, PageHeader, ProgressBar, cx } from '../components/ui'
+import { Badge, Button, Card, PageHeader, cx } from '../components/ui'
+import { SegmentBar, solidColor } from '../components/gauges'
 
 export default function Diagnose() {
   const [symptom, setSymptom] = useState<Symptom | null>(null)
@@ -43,10 +44,10 @@ function SymptomPicker({ onPick }: { onPick: (s: Symptom) => void }) {
           <button
             key={s.id}
             onClick={() => onPick(s)}
-            className="group flex cursor-pointer flex-col items-start gap-2 rounded-2xl border border-line bg-surface p-5 text-left transition-colors hover:border-accent/60 hover:bg-surface-2"
+            className="panel group flex cursor-pointer flex-col items-start gap-2 rounded-2xl border border-line p-5 text-left transition-colors hover:border-accent/60"
           >
             <Stethoscope size={20} className="text-accent" />
-            <div className="font-semibold">{s.title}</div>
+            <div className="font-display text-lg font-bold uppercase tracking-wide">{s.title}</div>
             <div className="text-sm text-muted">{s.blurb}</div>
             <div className="mt-auto flex items-center gap-1 pt-2 text-xs font-semibold text-accent opacity-70 group-hover:opacity-100">
               {s.questions.length} questions <ChevronRight size={14} />
@@ -66,17 +67,17 @@ function QuestionStep({ symptom, step, onAnswer, onBack }: { symptom: Symptom; s
   return (
     <Card className="mx-auto max-w-2xl">
       <div className="mb-2 flex items-center justify-between text-xs text-muted">
-        <span className="font-semibold uppercase tracking-wider">{symptom.title}</span>
+        <span className="font-display text-sm font-semibold uppercase tracking-[0.14em]">{symptom.title}</span>
         <span className="num">Question {step + 1} of {symptom.questions.length}</span>
       </div>
-      <ProgressBar value={step / symptom.questions.length} tone="accent" />
-      <h2 className="mt-6 text-xl font-bold">{q.text}</h2>
+      <SegmentBar value={(step + 1) / symptom.questions.length} segments={symptom.questions.length} color={solidColor('var(--color-accent)')} />
+      <h2 className="mt-6 font-display text-2xl font-bold">{q.text}</h2>
       <div className="mt-5 flex flex-col gap-2.5">
         {q.options.map((o, i) => (
           <button
             key={o.label}
             onClick={() => onAnswer(i)}
-            className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-line bg-surface-2 px-4 py-3.5 text-left font-medium transition-colors hover:border-accent hover:text-accent"
+            className="flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-line bg-[#0c0e11] px-4 py-3.5 text-left font-medium transition-colors hover:border-accent hover:text-accent"
           >
             {o.label}
             <ChevronRight size={16} className="shrink-0 text-muted" />
@@ -124,7 +125,7 @@ function Results({ symptom, answers, onBack }: { symptom: Symptom; answers: numb
               </div>
             </div>
             <div className="mt-3 flex items-center gap-3">
-              <div className="flex-1"><ProgressBar value={c.confidence / 100} tone={i === 0 ? 'accent' : 'warn'} /></div>
+              <div className="flex-1"><SegmentBar value={c.confidence / 100} segments={25} color={solidColor(i === 0 ? 'var(--color-accent)' : 'var(--color-warn)')} /></div>
               <span className="num w-12 text-right text-sm font-semibold">{c.confidence}%</span>
             </div>
             <p className="mt-3 text-sm text-muted">{c.fix}</p>

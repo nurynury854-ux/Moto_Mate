@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <rect width="512" height="512" rx="112" fill="#0b0d10"/>
   <circle cx="256" cy="256" r="168" fill="none" stroke="#2a2f37" stroke-width="28"/>
-  <path d="M120 300 A140 140 0 0 1 392 300" fill="none" stroke="#f97316" stroke-width="28" stroke-linecap="round"/>
+  <path d="M120 300 A140 140 0 0 1 392 300" fill="none" stroke="#ff6a13" stroke-width="28" stroke-linecap="round"/>
   <line x1="256" y1="290" x2="340" y2="190" stroke="#fafafa" stroke-width="22" stroke-linecap="round"/>
-  <circle cx="256" cy="290" r="26" fill="#f97316"/>
+  <circle cx="256" cy="290" r="26" fill="#ff6a13"/>
   <text x="256" y="400" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="64" fill="#fafafa">MM</text>
 </svg>

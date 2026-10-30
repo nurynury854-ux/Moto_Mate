@@ -28,7 +28,8 @@ All data stays private in the browser — no sign-up needed. Judges can add `?de
 
 ## How we built it
 
-- **React + TypeScript + Vite** for the app and **Tailwind CSS** for a dark, dashboard-style UI designed mobile-first, since riders use their phones.
+- **React + TypeScript + Vite** for the app and **Tailwind CSS** for a dark UI designed mobile-first, since riders use their phones.
+- The design is inspired by a real **motorcycle instrument cluster**: hand-built SVG analog dials with colored zones and a needle that does an "ignition self-test" sweep on load, LED segment bars for maintenance wear and the hourly forecast, a rolling mechanical odometer, and warning lights that glow when oil, chain or brakes need attention.
 - **Open-Meteo** forecast and air-quality APIs for live hourly data — free and no API key, so the demo never breaks.
 - The **ride score** is a transparent penalty model: start at 100 and subtract points for rain probability, rainfall, thunderstorms, gusts, heat/cold (feels-like temperature), AQI and UV.
 - The **diagnosis engine** is a weighted rule system: each answer adds or removes weight from possible causes, and the result is normalized into confidence percentages.
